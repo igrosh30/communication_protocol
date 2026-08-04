@@ -93,11 +93,13 @@ enum CMD_ID : uint8_t
 
 enum AckStatus : uint8_t
 {
-    ACK_OK = 0,
-    ACK_ERROR = 1,
-    ACK_BUSY = 2,
-    ACK_TIMEOUT = 3,
-    ACK_TIMEOUT_PING_BUOY = 4
+    ACK_OK        = 0,
+    ACK_GPS_ERR   = 1,
+    ACK_LORA_ERR  = 11,
+    ACK_ERROR     = 2,
+    ACK_BUSY      = 3,
+    ACK_TIMEOUT   = 4,
+    ACK_TIMEOUT_PING_BUOY = 5
 };
 
 

@@ -80,13 +80,13 @@ void FrameParser :: processIncomingByte(uint8_t byte)
             if (calculated == frame.crc)
             {
                 newFrameReady = true;
-                //Serial.printf("RECEIVED VALID FRAME:\nsrc=%u dest=%u type=%u len=%u\n\n",
-                //                frame.header.src, frame.header.dest,
-                //                frame.header.type, frame.header.len);
+                DBG("RECEIVED VALID FRAME:\nsrc=%u dest=%u type=%u len=%u\n\n",
+                                frame.header.src, frame.header.dest,
+                                frame.header.type, frame.header.len);
                 
             }else{
-                //Serial.printf("[PARSE] CRC FAIL got=0x%04X calc=0x%04X\n",
-                //                frame.crc, calculated);
+                DBG("[PARSE] CRC FAIL got=0x%04X calc=0x%04X\n",
+                               frame.crc, calculated);
             }
             currentState = STATE_WAIT_FOR_SOF;//after processing the 2 bytes for CRC...
         }

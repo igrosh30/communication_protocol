@@ -2,6 +2,7 @@
 #define HOST_FRAME_PARSER_H
 
 #include "protocol.h"
+#include  "debug.h"
 
 enum RxState : uint8_t
 {

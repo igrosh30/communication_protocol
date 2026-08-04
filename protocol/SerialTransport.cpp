@@ -1,17 +1,16 @@
-#include "dataLink.h"
 #include <string.h>
+#include "SerialTransport.h"
 
-#ifdef ARDUINO
 
 // Default constructor - does nothing
-DataLink::DataLink() 
+SerialTransport::SerialTransport() 
     : serialPort(nullptr), 
       parser() 
 {
  
 }
 
-void DataLink::init(Stream* port, bool useAcousticModem)
+void SerialTransport::init(Stream* port, bool useAcousticModem)
 {
     if(port != nullptr)
     {
@@ -21,8 +20,8 @@ void DataLink::init(Stream* port, bool useAcousticModem)
     }
 }
 
-uint8_t DataLink::sendFrame(const Frame& f) {
-
+int16_t SerialTransport::sendFrame(const Frame& f) 
+{    
     uint8_t bytes_written = 0;
     uint8_t txBuffer[32]; 
     uint8_t index = 0;
@@ -44,6 +43,15 @@ uint8_t DataLink::sendFrame(const Frame& f) {
 
     if(this->isModem)
     {
+        //dain the modem buffer!
+        uint32_t lastByteTime = millis();
+        while (millis() - lastByteTime < 50)
+        {
+            if (serialPort->available()) {
+                serialPort->read();  // drain
+                lastByteTime = millis();
+            }
+        }
         serialPort->print("$B");
 
         //send leght of the message -> index! 
@@ -61,28 +69,27 @@ uint8_t DataLink::sendFrame(const Frame& f) {
     return bytes_written;
 }
 
-void DataLink::update() {//Read bytes available
+void SerialTransport::updateFrame() {//Read bytes available
     uint8_t bytesCount = 0;
     while(serialPort->available() && bytesCount < MAX_BYTES_PER_CYCLE) //16 bytes Serial.available() && 
     {
         uint8_t incomingByte = (uint8_t)serialPort->read();   
-        DBG("RX 0x%02X\n", incomingByte);
+        //DBG("RX 0x%02X\n", incomingByte);
         parser.processIncomingByte(incomingByte);//Update the State!
         bytesCount++;
     }
 }
 
-bool DataLink::hasNewFrame() const {
+bool SerialTransport::hasNewFrame() const {
     return parser.newFrameReady;
 }
 
-void DataLink::getFrame(Frame& outFrame) {
+void SerialTransport::getFrame(Frame& outFrame) {
     parser.newFrameReady = false;//IMPORTANT to RESET the flag! we got the frame 
-    memcpy(&outFrame,&parser.frame,sizeof(Frame));
+    memcpy(&outFrame,&parser.frame, sizeof(Frame));
 }
 
-void DataLink::reset() {
+void SerialTransport::reset() {
     parser.init();
 }
-
-#endif // ARDUINO
+ 
