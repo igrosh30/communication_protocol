@@ -31,22 +31,18 @@ CRC:
 enum NodeId 
 {
     HOST = 0,
-    BASE = 1,
-    BUOY = 2,
-    EXT  = 3
+    TANK_MCU = 1,
 };
 
 enum MsgType
 {
-    WAKE_UP     = 0,    //start all the COM'S
-    GO_SLEEP    = 99,
-    PING        = 1,
-    PONG        = 2,
-    DATA        = 3,    //SEND & ASK - direction in payload specifies 
-    ACK         = 4,     //Processed correctly your message!
-    LORA_ER     = 91,
-    GPS_ER      = 92,
-    LORA_GPS_ER = 93,
+    PING        = 0,
+    PONG        = 1,
+    CMD         = 10,    //ACTUATION.
+    DATA_SEND   = 20,    //DATA - sending or asking? 
+    DATA_ASK    = 21,      //we can ask the tank state! 
+    ACK         = 100, 
+    MSG_ERROR   = 99,
 };
 
 struct Header
@@ -62,9 +58,8 @@ union PayloadData//Size of a union is always the size of it's biggest member!
     uint8_t raw[MAX_PAYLOAD];
 
     struct {
-        uint8_t direction;  //Byte 0   : 0-> SEND / 1-> ASK/CMD
         uint8_t cmdId;      //Byte 1   : corresponding enum
-        uint8_t param[MAX_PAYLOAD-2];     //Byte 2-7 : bytes for data
+        uint8_t param[MAX_PAYLOAD-1];     //Bytes 1-11 : data after cmdId
     }data;
 
     struct { 
@@ -73,29 +68,18 @@ union PayloadData//Size of a union is always the size of it's biggest member!
     } action_ack;
     
     // Named views for common replies (same memory!)
-    struct {  uint8_t cmdId; uint8_t battery_V;} battery_reply; 
-    struct { uint16_t depth_mm; } pop_up_params;
+    // struct {  uint8_t cmdId; uint8_t battery_V;} battery_reply; 
+    // struct { uint16_t depth_mm; } pop_up_params;
 };
 
 enum CMD_ID : uint8_t
 {
-    ASK_BATTERY =1,
-    POP_UP      =2,
-    RETREIVE    =3,
-    STOP_MOTOR  =4,
-    SET_DEPTH   =5,// set depth from HOST
-    BUOY_AT_BASE=6,
-};
-
-enum AckStatus : uint8_t
-{
-    ACK_OK        = 0,
-    ACK_GPS_ERR   = 1,
-    ACK_LORA_ERR  = 11,
-    ACK_ERROR     = 2,
-    ACK_BUSY      = 3,
-    ACK_TIMEOUT   = 4,
-    ACK_TIMEOUT_PING_BUOY = 5
+    WAKE_UP         =1,
+    START_CYCLE     =2,
+    SET_TIMEOUT     =3,
+    REPORT_STATUS   =4,
+    TANK_MOVING     =5,
+    TANK_READY      =6,
 };
 
 
