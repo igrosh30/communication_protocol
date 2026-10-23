@@ -1,6 +1,7 @@
 #include <string.h>
 #include "SerialTransport.h"
 
+//SERIAL Transport - Coupled to Arduino Stream*
 
 // Default constructor - does nothing
 SerialTransport::SerialTransport() 
