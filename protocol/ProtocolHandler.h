@@ -1,18 +1,18 @@
-#ifndef APP_LAYER_H
-#define APP_LAYER_H
+#ifndef PROTOCOL_HANDLER_H
+#define PROTOCOL_HANDLER_H
 
 #include "FrameParser.h"
 #include "ITransport.h"
 
 
-class AppLayer {
+class ProtocolHandler {
 
 protected:
     NodeId myId;
 
 public:
     // Constructor
-    AppLayer(NodeId id);
+    ProtocolHandler(NodeId id);
 
     uint8_t processFrame(const Frame& f, ITransport &ddl);//returns bytes writen
     

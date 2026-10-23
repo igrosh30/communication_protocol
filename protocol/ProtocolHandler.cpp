@@ -1,11 +1,11 @@
-#include "AppLayer.h"
+#include "ProtocolHandler.h"
 #include "debug.h"
 
-AppLayer::AppLayer(NodeId id) {
+ProtocolHandler::ProtocolHandler(NodeId id) {
     this->myId = id;
 }
 
-uint8_t AppLayer:: processFrame(const Frame& f, ITransport &ddl) { // process Frame is called in Application Layer! Note: our AppLayer is not the AppLayer! is Network Layer! 
+uint8_t ProtocolHandler:: processFrame(const Frame& f, ITransport &ddl) { // process Frame is called in Application Layer! Note: our AppLayer is not the AppLayer! is Network Layer! 
     
     uint8_t type = f.header.type;
     uint8_t cmd  = f.payload.data.cmdId;
@@ -59,7 +59,7 @@ uint8_t AppLayer:: processFrame(const Frame& f, ITransport &ddl) { // process Fr
 
 
 // Inside AppLayer.cpp
-uint8_t AppLayer::replyAck(const Frame& f_received, uint8_t status, ITransport &ddl) //this is sending or better build?
+uint8_t ProtocolHandler::replyAck(const Frame& f_received, uint8_t status, ITransport &ddl) //this is sending or better build?
 {
     //ONLY TYPE WITH DIFFERENT REPPLY IS PING! 
     Frame reply;
@@ -70,7 +70,8 @@ uint8_t AppLayer::replyAck(const Frame& f_received, uint8_t status, ITransport &
     return ddl.sendFrame(reply);//Send back
 }
 
-void AppLayer::buildReplyHeader(Frame& f, uint8_t type, uint8_t payloadLen, uint8_t dest) {
+void ProtocolHandler::buildReplyHeader(Frame& f, uint8_t type, uint8_t payloadLen, uint8_t dest)
+{
     f.sof = SOF_VALUE;
     f.header.src = this->myId; // Automatically set to our ID
     f.header.dest = dest;

@@ -11,13 +11,6 @@ const uint8_t SOF_VALUE     = 0x7E;
 const uint8_t MAX_PAYLOAD   = 12; 
 
 /*
-Rasp5 config:
-ssh control: 
-username: pi5crasuser
-password: #CRasfeUP2026
-hostname: pi5-cras 
-//Start the ven: source venv/bin/activate
-//deactivate: 
 
 SOF = 0x7E
 
@@ -50,7 +43,10 @@ enum MsgType
     PING        = 1,
     PONG        = 2,
     DATA        = 3,    //SEND & ASK - direction in payload specifies 
-    ACK         = 4     //Processed correctly your message!
+    ACK         = 4,     //Processed correctly your message!
+    LORA_ER     = 91,
+    GPS_ER      = 92,
+    LORA_GPS_ER = 93,
 };
 
 struct Header

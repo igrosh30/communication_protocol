@@ -80,16 +80,19 @@ void SerialTransport::updateFrame() {//Read bytes available
     }
 }
 
-bool SerialTransport::hasNewFrame() const {
+bool SerialTransport::hasNewFrame() const 
+{
     return parser.newFrameReady;
 }
 
-void SerialTransport::getFrame(Frame& outFrame) {
+void SerialTransport::getFrame(Frame& outFrame)
+{
     parser.newFrameReady = false;//IMPORTANT to RESET the flag! we got the frame 
     memcpy(&outFrame,&parser.frame, sizeof(Frame));
 }
 
-void SerialTransport::reset() {
+void SerialTransport::reset()
+{
     parser.init();
 }
  
