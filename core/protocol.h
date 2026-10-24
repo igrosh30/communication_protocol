@@ -74,13 +74,18 @@ union PayloadData//Size of a union is always the size of it's biggest member!
 
 enum CMD_ID : uint8_t
 {
-    WAKE_UP         =1,
-    START_CYCLE     =2,
-    SET_TIMEOUT     =3,
-    ASK_TANK_STATE  =10,
-    REPORT_STATUS   =11,
-    TANK_MOVING     =12,
-    TANK_READY      =19,
+    WAKE_UP        = 1,
+    START_CYCLE    = 2,
+    SET_TIMEOUT    = 3,
+    ASK_TANK_STATE = 10,
+};
+
+enum AckStatus : uint8_t
+{
+    ACK_OK      = 0,
+    ACK_ERROR   = 2,
+    ACK_BUSY    = 3,
+    ACK_TIMEOUT = 4,
 };
 
 
